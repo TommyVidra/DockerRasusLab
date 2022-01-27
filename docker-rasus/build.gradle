@@ -1,0 +1,64 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.docker.rassus'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation group: 'org.json', name: 'json', version: '20090211'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.5.8'
+    compileOnly 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+//    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.27'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:2.2.10.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.2'
+
+}
+jar {
+    manifest {
+        attributes "Main-Class": "com.docker.rassus.demo.DockerTemperatureService"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect {
+            exclude 'about.html'
+            exclude 'LICENSE'
+            exclude 'NOTICE'
+            exclude 'license.txt'
+            exclude 'notice.txt'
+            exclude 'LICENSE.txt'
+            exclude 'NOTICE.txt'
+            exclude 'META-INF/services/reactor.blockhound.integration.BlockHoundIntegration'
+            exclude 'META-INF/services/com.fasterxml.jackson.databind.Module'
+            exclude 'META-INF/versions/11/module-info.class'
+            exclude 'META-INF/services/javax.servlet.ServletContainerInitializer'
+            exclude 'META-INF/services/org.apache.logging.log4j.util.PropertySource'
+            exclude 'META-INF/versions/9/module-info.class'
+            exclude 'module-info.class'
+            exclude 'META-INF/*'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE.txt'
+            exclude 'META-INF/NOTICE.txt'
+            exclude 'META-INF/DEPENDENCIES'
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+task processPackageResources(type: Copy) {
+    duplicatesStrategy = 'include'
+}
